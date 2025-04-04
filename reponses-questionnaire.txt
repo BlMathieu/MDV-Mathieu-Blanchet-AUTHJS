@@ -1,0 +1,71 @@
+1. Comment définiriez-vous l'auhtentification ? (Quels sont ses mécanismes, à quoi sert-elle ?)
+L'authentification regroupe l'ensemble des mécanismes permettant d'identifier un utilisateur. 
+Cette identification est nécessaire pour déterminer les droits de cette utilisateur.
+
+2. Quelles sont les différences avec l'authorisation ?
+L'authorisation permet l'attribution de droits à un utilisateur précédemment authentifier.
+Contrairement à l'authentification, l'authorisation ne permet pas de prouver l'identité d'un utilisateur.
+
+3. Qu'est-ce qu'un facteur d'authentification ?
+Un facteur d'authentification est une méthode permettant d'authentfier un utilisateur.
+
+
+4. Citez 3 méthodes d'authentification
+ - Authentification par token JWT
+ - Authentification par Session utilisateur
+ - Authentification par OAuth2 à partir d'un service d'authentification externe
+
+
+5. Qu'est-ce que le hashage ?
+Le hashage est une méthode consistant à altéré de manière définitive une valeur.
+Les valeurs hashé ne peuvent pas être déchiffrer.
+
+6. À quoi sert le sel dans le hashage ?
+Le sel dans le hashage est une valeur supplémentaires ajouté à une chaîne de caractère hasher.
+Elle permet de rendre unique chaque valeur hasher.
+
+
+7. Qu'est-ce que le chiffrement ?
+Le chiffrement est une méthode de sécurité permettant d'altéré une donnée à l'aide d'une clé privé.
+La donnée chiffrer peut être révélé en utilisant une clé publique pour le chiffrement asymétrique ou en réutilisant la même clé privé pour le chiffrement symétrique.
+
+
+8. Qu'est-ce que l'attaque par force brute ? Et comment s'en prémunir ?
+L'attaque par brute force consiste à tester plusieurs combinaisons de mot de passe en boucle jusqu'a trouvé le bon.
+Pour s'en prémunir, il existe plusieurs solutions :
+- Fournir un mot de passe robuste de plus de 8 caractères alliant lettres, chiffres et caractères spéciaux
+- Limiter les nombres d'essai lors d'une connexion (example: utiliser un rate-limiter)
+
+9. Quels sont les points d'attentions lors d'un développement d'un système d'authentification ?
+(architecture, code, dépendences, etc...)
+
+
+10. Expliquer le principe d'authentification multifacteur ?
+L'authentification multifacteur est un système d'authentification demandant aux utilisateur de fournir au moins deux moyen de prouvé son identité.
+
+
+11. Qu'est-ce qu'une attaque CSRF ? Comment peut-on s'en protéger ?
+
+
+
+12. Expliquez ce que représente pour vous le principe de session, de cookies et de headers.
+Une session est une instance géré côté serveur permettant de stocké des informations de manière temporaire.
+Un cookie est une instance géré côté client permettant de stocké des informations de manière temporaire.
+Un header est une information renseigné depuis le serveur et envoyé au client par le biais d'une requête HTTP.
+
+
+13. Par quel protocole est sécurisé l'échange d'information entre un client web et un serveur web ?
+Expliquez les grands principes
+Ce protocole d'échange ce nomme HTTP. Il permet d'assurer les échanges d'informations entre client et serveur en envoyant des données HTML ainsi que des informations supplémentaires en-têtes.
+Il existe une version plus sécurisé de ce protocole nommé HTTPS permettant de chiffrer les données échangé à l'aide d'un certificat TLS.
+
+
+14. Qu'est-ce qu'un token JWT ? De quoi est-il composé ?
+Un token JWT est une chaîne de caractère encoder en base64 signer par un algorithme à l'aide d'une clée privée et contenant un ensemble d'informations (tels que : un username, un rôle, une durée de vie...) préalablement par renseigné le développeur.
+Ce token permet ensuite d'authentifier un utilisateur sans que ce dernier ai besoin de renseigner à nouveau ses informations personnelles.
+
+
+15. Qu'est-ce que l'OAuth 2 ? Qu'est-ce qu'il résoud ?
+L'OAuth2 permet à une application d'authentifier ses utilisateurs en passant par un service d'authentification externe (exemple: google authenticator).
+Ce mécanisme permet de faire gagner du temps au développeur qui n'a plus à ce soucier de créer un système d'authentification pour son application.
+Aussi, d'un point de vu légal, cela permet de rediriger certaines implications juridiques en matière de protection des données, sur l'organisme externe gérant l'authentification des utilisateurs.

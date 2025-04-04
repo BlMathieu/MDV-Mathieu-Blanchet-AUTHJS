@@ -1,5 +1,4 @@
 import TokenType, { TokenSignature, UserPayload } from "./types/TokenType";
-import UserType from "./types/UserType";
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import 'dotenv/config';
 
@@ -8,10 +7,10 @@ export default class JwtService {
     private accessKey: string;
     constructor() {
         this.accessKey = process.env.ACCESS_KEY || '';
-        this.refreshKey = process.env.REFRESH_KEY || ''
+        this.refreshKey = process.env.REFRESH_KEY || '';
     }
 
-    public getAcessToken(user: UserPayload) {
+    public getAccessToken(user: UserPayload) {
         const payload: TokenType = {
             ...user,
             iat: Date.now() + 1000 * 30,
@@ -22,9 +21,7 @@ export default class JwtService {
 
     public getRefreshToken(user: UserPayload): string {
         const payload: TokenType = {
-            username: user.username,
-            email: user.email,
-            role: user.role,
+            ...user,
             iat: Date.now() + 1000 * 60 * 60 * 24,
         }
         const token = jwt.sign(payload, this.refreshKey);
@@ -32,7 +29,7 @@ export default class JwtService {
     }
 
     public checkTokenSignature(token: string, type: TokenSignature): JwtPayload | string {
-        if (type === 'access') return jwt.verify(token, { key: process.env.ACCESS_KEY || '' });
-        else return jwt.verify(token, { key: process.env.REFRESH_KEY || '' });
+        if (type === 'access') return jwt.verify(token, this.accessKey);
+        else return jwt.verify(token, this.refreshKey);
     }
 }

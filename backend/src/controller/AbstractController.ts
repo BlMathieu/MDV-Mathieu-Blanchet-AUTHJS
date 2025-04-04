@@ -10,6 +10,7 @@ export default abstract class AbstractController {
         try {
             res.send(await callback());
         } catch (error) {
+            console.error(error);
             if (error instanceof Error) res.send(errorResponse(error.message));
             else res.send(errorResponse(`Erreur du serveur !`));
         }

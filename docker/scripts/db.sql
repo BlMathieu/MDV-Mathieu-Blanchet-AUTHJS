@@ -4,7 +4,7 @@ CREATE OR REPLACE User 'monUtilisateurAuthJS'@'%' IDENTIFIED BY 'monmotdepasses�
 CREATE TABLE IF NOT EXISTS db_authjs.users (
     email VARCHAR(200),
     username VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(200) NOT NULL,
     refresh_token VARCHAR(500),
     role ENUM('étudiant', 'intervenant') NOT NULL DEFAULT 'étudiant',
     PRIMARY KEY (email)

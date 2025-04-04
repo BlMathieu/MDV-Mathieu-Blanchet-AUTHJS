@@ -12,7 +12,7 @@ export default class AuthenticatorController extends AbstractController {
     }
 
     public getRoutes(): Router {
-        this.router.post('login', (req: Request, res: Response) => {
+        this.router.post('/login', (req: Request, res: Response) => {
             this.errorHandler(async () => {
                 const { email, password } = req.body;
                 const tokens = await this.service.logUser(email, password);
@@ -20,21 +20,22 @@ export default class AuthenticatorController extends AbstractController {
                 return authSuccess(`L'utilisateur est connecté !`, tokens.access);
             }, res);
         });
-        this.router.post('register', (req: Request, res: Response) => {
+        this.router.post('/register', (req: Request, res: Response) => {
             this.errorHandler(async () => {
                 const user: UserType = req.body;
                 await this.service.registerUser(user);
                 return authSuccess(`L'utilisateur ${user.username} à bien été enregistré`);
             }, res);
         });
-        this.router.post('refresh', (req: Request, res: Response) => {
+        this.router.post('/refresh', (req: Request, res: Response) => {
             this.errorHandler(async () => {
                 const refresh = req.cookies['refresh_token'];
+                console.log(refresh)
                 const access = await this.service.refreshUser(refresh);
                 return authSuccess('Utilisateur ré-authentifier !', access);
             }, res)
         });
-        this.router.post('logout', (req: Request, res: Response) => {
+        this.router.post('/logout', (req: Request, res: Response) => {
             this.errorHandler(() => {
                 res.clearCookie('refresh_token');
                 return authSuccess("L'utilisateur à bien été déconnecté !");

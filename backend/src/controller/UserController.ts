@@ -7,7 +7,7 @@ import UserModel from "../model/UserModel";
 export default class UserController extends AbstractController {
     constructor() { super(); }
     public getRoutes(): Router {
-        this.router.get('/:email', (req: Request, res: Response) => {
+        this.router.get('/user/:email', (req: Request, res: Response) => {
             this.errorHandler(async () => {
                 const { email } = req.params;
                 const user = await UserModel.findOne({ where: { email: email } });
@@ -26,15 +26,6 @@ export default class UserController extends AbstractController {
                 const users = await UserModel.findAll({ where: { role: 'intervenant' } });
                 return userSuccess(`Les intervenants on été trouvé`, users as unknown as UserType[]);
             }, res)
-        });
-
-        this.router.post('/', (req: Request, res: Response) => {
-            this.errorHandler(async () => {
-                const user: UserType = req.body;
-                const response = await UserModel.create(user);
-                console.log(response);
-                return userSuccess(`Utilisateur ${user.username} créé !`);
-            }, res);
         });
         return this.router;
     }

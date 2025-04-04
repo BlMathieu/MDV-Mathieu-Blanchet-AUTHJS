@@ -1,0 +1,38 @@
+import UserModel from "../model/UserModel";
+import { comparePassword } from "../utils/BcryptUtils";
+import JwtUtils from "../utils/JwtUtils";
+import { UserPayload } from "../utils/types/TokenType";
+import UserType, { Role } from "../utils/types/UserType";
+
+export default class AuthenticationService {
+    private jwtUtils: JwtUtils;
+    constructor() {
+        this.jwtUtils = new JwtUtils();
+    }
+
+    public async logUser(email: string, plainPassword: string): Promise<{ access: string, refresh: string }> {
+        const dbUser = await UserModel.findOne({ where: { email: email } });
+        if (!dbUser) throw new Error("Information invalide !");
+        const hashedPassword: string = dbUser.get('password') as string;
+        if (!comparePassword(plainPassword, hashedPassword)) throw new Error('Information invalide !');
+        const payload: UserPayload = {
+            username: dbUser.get('username') as string,
+            email: dbUser.get('email') as string,
+            role: dbUser.get('role') as Role,
+        };
+        const accessToken = this.jwtUtils.getAcessToken(payload);
+        const refreshToken = this.jwtUtils.getRefreshToken(payload);
+        return { access: accessToken, refresh: refreshToken };
+    }
+
+    public async registerUser(user: UserType): Promise<void> {
+        await UserModel.create(user);
+    }
+
+    public async refreshUser(token: string): Promise<string> {
+        if (!token) throw new Error('Aucun token trouvé !');
+        const payload = this.jwtUtils.checkTokenSignature(token, 'refresh');
+        const access = this.jwtUtils.getAcessToken(payload as UserPayload);
+        return access;
+    }
+}

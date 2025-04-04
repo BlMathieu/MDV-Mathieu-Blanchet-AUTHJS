@@ -1,10 +1,10 @@
-import UserEntity from '../../entities/UserEntity';
+import UserType from '../types/UserType';
 import BaseResponse from './BaseResponse';
 export default interface UserResponse extends BaseResponse {
-    data?: UserEntity,
+    data?: UserType | UserType[],
 }
 
-export const userSuccess = (message: string, data?: UserEntity): UserResponse => {
+export const userSuccess = (message: string, data?: UserType | UserType[]): UserResponse => {
     return {
         message: message,
         status: true,

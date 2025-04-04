@@ -35,7 +35,7 @@ export default class AuthenticatorController extends AbstractController {
                 return authSuccess('Utilisateur ré-authentifier !', access);
             }, res)
         });
-        this.router.post('/logout', (req: Request, res: Response) => {
+        this.router.post('/logout', (_req: Request, res: Response) => {
             this.errorHandler(() => {
                 res.clearCookie('refresh_token');
                 return authSuccess("L'utilisateur à bien été déconnecté !");

@@ -23,9 +23,10 @@ export default class AuthenticatorController extends AbstractController {
         this.router.post('/register', (req: Request, res: Response) => {
             this.errorHandler(async () => {
                 const user: UserType = req.body;
+                console.log(user);
                 await this.service.registerUser(user);
                 return authSuccess(`L'utilisateur ${user.username} à bien été enregistré`);
-            }, res);
+            }, res);    
         });
         this.router.post('/refresh', (req: Request, res: Response) => {
             this.errorHandler(async () => {

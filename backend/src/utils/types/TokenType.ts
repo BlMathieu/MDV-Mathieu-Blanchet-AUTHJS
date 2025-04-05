@@ -2,12 +2,8 @@ import { Role } from "./UserType"
 
 export type TokenSignature = 'refresh' | 'access';
 
-export interface UserPayload {
+export default interface TokenType {
     username: string,
     email: string,
     role: Role
-}
-
-export default interface TokenType extends UserPayload {
-    iat: number
 }

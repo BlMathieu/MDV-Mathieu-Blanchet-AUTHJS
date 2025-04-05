@@ -1,7 +1,7 @@
 import UserModel from "../model/UserModel";
 import { comparePassword, hashPassword } from "../utils/BcryptUtils";
 import JwtUtils from "../utils/JwtUtils";
-import { UserPayload } from "../utils/types/TokenType";
+import TokenType from "../utils/types/TokenType";
 import UserType, { Role } from "../utils/types/UserType";
 
 export default class AuthenticationService {
@@ -17,7 +17,7 @@ export default class AuthenticationService {
         const hashedPassword: string = dbUser.get('password') as string;
         if (!comparePassword(plainPassword, hashedPassword)) throw new Error('Information invalide !');
 
-        const payload: UserPayload = {
+        const payload: TokenType = {
             username: dbUser.get('username') as string,
             email: dbUser.get('email') as string,
             role: dbUser.get('role') as Role,
@@ -37,7 +37,7 @@ export default class AuthenticationService {
     public async refreshUser(token: string): Promise<string> {
         if (!token) throw new Error('Aucun token trouvé !');
        
-        const payload = this.jwtUtils.checkTokenSignature(token, 'refresh') as UserPayload;
+        const payload = this.jwtUtils.checkTokenSignature(token, 'refresh') as TokenType;
         const dbUser = await UserModel.findOne({ where: { email: payload.email } });
         if (dbUser?.get('refresh_token') != token) throw new Error('Refresh token incorrect !');
        

@@ -21,7 +21,7 @@ const Users = client.define('users', {
         type: DataTypes.STRING,
         defaultValue: 'étudiant',
         validate: {
-            isIn: [['étudiant', 'intervenant']],
+            isIn: [['étudiant', 'intervenant', 'admin']],
         }
     },
 });

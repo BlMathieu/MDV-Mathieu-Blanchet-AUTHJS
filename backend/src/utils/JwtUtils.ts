@@ -1,8 +1,8 @@
-import TokenType, { TokenSignature, UserPayload } from "./types/TokenType";
+import TokenType, { TokenSignature } from "./types/TokenType";
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import 'dotenv/config';
 
-export default class JwtService {
+export default class JwtUtils {
     private refreshKey: string;
     private accessKey: string;
     constructor() {
@@ -10,26 +10,20 @@ export default class JwtService {
         this.refreshKey = process.env.REFRESH_KEY || '';
     }
 
-    public getAccessToken(user: UserPayload) {
-        const payload: TokenType = {
-            ...user,
-            iat: Date.now() + 1000 * 30,
-        }
-        const token = jwt.sign(payload, this.accessKey);
+    public getAccessToken(user: TokenType) {
+        const delay = 60 * 5;
+        const token = jwt.sign(user, this.accessKey, { expiresIn: delay });
         return token
     }
 
-    public getRefreshToken(user: UserPayload): string {
-        const payload: TokenType = {
-            ...user,
-            iat: Date.now() + 1000 * 60 * 60 * 24,
-        }
-        const token = jwt.sign(payload, this.refreshKey);
+    public getRefreshToken(user: TokenType): string {
+        const delay = 60 * 60 * 24
+        const token = jwt.sign(user, this.refreshKey, { expiresIn: delay });
         return token
     }
 
     public checkTokenSignature(token: string, type: TokenSignature): JwtPayload | string {
-        if (type === 'access') return jwt.verify(token, this.accessKey);
-        else return jwt.verify(token, this.refreshKey);
+        if (type === 'access') return jwt.verify(token, this.accessKey, { ignoreExpiration: false });
+        else return jwt.verify(token, this.refreshKey, { ignoreExpiration: false });
     }
 }

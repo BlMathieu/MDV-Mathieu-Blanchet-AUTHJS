@@ -52,6 +52,7 @@ L'API utilisateur contient les routes sécurisés suivantes :
  Pour lancer le frontend (dossier /frontend):
  - npm install (pour installer les dépendances)
  - npm run dev (pour lancer le serveur web)
+ 
  Concernant le .env, il devra contenir la varariable : 
  - VITE_SERVER_URL (contient l'adresse du backend example : http://localhost:3000)
 

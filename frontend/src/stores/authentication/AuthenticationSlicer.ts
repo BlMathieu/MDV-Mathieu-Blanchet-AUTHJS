@@ -27,7 +27,6 @@ const handleLogin = (state: any, action: any) => {
     state.token = data.token;
     state.user = jwtDecode(data.token);
     state.isLogged = data.status;
-    console.log("UPDATE !");
 }
 const resetState = (state: any) => {
     state.isLogged = initialState.isLogged;

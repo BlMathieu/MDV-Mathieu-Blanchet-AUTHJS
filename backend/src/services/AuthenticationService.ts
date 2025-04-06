@@ -5,6 +5,7 @@ import JwtUtils from "../utils/JwtUtils";
 import TokenType from "../utils/types/TokenType";
 import UserType, { Role } from "../utils/types/UserType";
 import * as OTPAuth from 'otpauth';
+import QRCode from 'qrcode';
 
 export default class AuthenticationService {
     private jwtUtils: JwtUtils;
@@ -94,5 +95,20 @@ export default class AuthenticationService {
         const refreshToken = jwtUtils.getRefreshToken(payload);
         await user.update({ 'refresh_token': refreshToken, 'mfaValidated': true }, { where: { email: email } })
         return { access: accessToken, refresh: refreshToken };
+    }
+
+    public async handleOtpQRCode(accessToken: string) : Promise<string> {
+        const user = await this.handleJWTAuth(accessToken);
+        const email = user.get('email') as string;
+        const totp = new OTPAuth.TOTP({
+            issuer: 'MFA-OTP',
+            label: email,
+            algorithm: 'SHA1',
+            digits: 6,
+            period: 30
+        });
+        await user.update({ 'mfaSecret': totp.secret.base32 }, { where: { email: email } });
+        const qrCode = await QRCode.toDataURL(totp.toString());
+        return qrCode;
     }
 }

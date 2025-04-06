@@ -6,7 +6,7 @@ export default interface UserType {
     username: string,
     password: string,
     role: Role,
-    refreshToken: string,
+    refresh_token: string,
     mfaValidated: boolean,
     mfaSecret: string,
 }

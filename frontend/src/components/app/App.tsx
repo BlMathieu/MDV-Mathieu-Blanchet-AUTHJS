@@ -24,9 +24,9 @@ function App() {
   return (
     <>
       <nav>
-        <ul className="flex list-none [&>li]:m-2 [&>li]:hover:underline [&>li]:hover:cursor-pointer justify-center">
-          {!mfaValidated && (<li className={display == 'login' ? 'underline' : ''} onClick={() => { setDisplay('login') }}>Se connecter</li>)}
-          {!isLogged && (<li className={display == 'register' ? 'underline' : ''} onClick={() => { setDisplay('register') }}>S'enregister</li>)}
+        <ul className="flex list-none [&>li]:m-2 [&>li]:hover:underline [&>li]:hover:cursor-pointer justify-center [&>li]:hover:scale-110">
+          {!mfaValidated && (<li className={display == 'login' ? 'underline hover:scale-110' : ''} onClick={() => { setDisplay('login') }}>Se connecter</li>)}
+          {!isLogged && (<li className={display == 'register' ? 'underline hover:scale-110' : ''} onClick={() => { setDisplay('register') }}>S'enregister</li>)}
           {isLogged && mfaValidated && <li onClick={() => { dispatch(logoutThunk()) }}>Déconnexion</li>}
           <li className={display == 'data' ? 'underline' : ''} onClick={() => { setDisplay('data') }}>Voir données</li>
         </ul>

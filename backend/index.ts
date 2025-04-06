@@ -12,8 +12,8 @@ const app = express();
 const authenticatorController = new AuthenticatorController();
 const userController = new UserController();
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	windowMs: 15 * 60 * 1000,
+	limit: 100,
 	standardHeaders: 'draft-8', 
 	legacyHeaders: false, 
 })
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 app.use(helmet());
-app.use(limiter)
+app.use(limiter);
 
 app.use("/authentication",authenticatorController.getRoutes());
 app.use("/users",userController.getRoutes());

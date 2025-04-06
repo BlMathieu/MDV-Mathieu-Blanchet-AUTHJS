@@ -10,9 +10,12 @@
     "jsonwebtoken": "^9.0.2",
     "mariadb": "^3.4.1",
     "nodemon": "^3.1.9",
+    "otpauth": "^9.4.0",
+    "qrcode": "^1.5.4",
     "sequelize": "^6.37.7",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "zod": "^3.24.2"
   },
   "scripts": {
     "dev": "npx nodemon index.ts",
@@ -24,6 +27,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^22.14.0"
+    "@types/node": "^22.14.0",
+    "@types/qrcode": "^1.5.5"
   }
 }

@@ -1,3 +1,4 @@
+import { Model } from "sequelize";
 import UserModel from "../model/UserModel";
 import { comparePassword, hashPassword } from "../utils/BcryptUtils";
 import JwtUtils from "../utils/JwtUtils";
@@ -36,12 +37,33 @@ export default class AuthenticationService {
 
     public async refreshUser(token: string): Promise<string> {
         if (!token) throw new Error('Aucun token trouvé !');
-       
-        const payload = this.jwtUtils.checkTokenSignature(token, 'refresh') as TokenType;
-        const dbUser = await UserModel.findOne({ where: { email: payload.email } });
+        const refreshPayload = this.jwtUtils.checkTokenSignature(token, 'refresh') as TokenType;
+        const dbUser = await UserModel.findOne({ where: { email: refreshPayload.email } });
         if (dbUser?.get('refresh_token') != token) throw new Error('Refresh token incorrect !');
-       
-        const access = this.jwtUtils.getAccessToken(payload);
+        const newPayload: TokenType = {
+            username: dbUser.get('username') as string,
+            email: dbUser.get('email') as string,
+            role: dbUser.get('role') as Role,
+        }
+        const access = this.jwtUtils.getAccessToken(newPayload);
         return access;
     }
+
+    public async handleJWTAuth(accessToken: string): Promise<Model> {
+        const jwtUtils = new JwtUtils();
+        if (!accessToken) throw new Error("L'authentification à échoué, token non trouvé !");
+        const userPayload = jwtUtils.checkTokenSignature(accessToken, 'access') as TokenType;
+        const dbUser = await UserModel.findOne({ where: { email: userPayload.email } });
+        if (!dbUser) throw new Error("L'utilisateur n'existe pas !");
+        return dbUser;
+    }
+    public async handleOTPAuth(accessToken: string, secret:string) {
+        const user = await this.handleJWTAuth(accessToken);
+        const email = user.get('email') as string;
+        const dbSecret = user.get('mfaSecret') as string;
+        if (secret != dbSecret) throw new Error('Secret incorrect !');
+        await user.update({ 'mfaValidated': true }, { where: { email: email } })
+    }
+
+
 }

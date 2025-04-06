@@ -17,17 +17,16 @@ export default class UserController extends AbstractController {
             }, res);
         });
         this.router.get('/etudiants', (req: Request, res: Response, next: NextFunction) => { RoleMiddleware(['intervenant', 'admin'], req, res, next); }, (req: Request, res: Response, next: NextFunction) => {
-
             this.errorHandler(async () => {
                 const users = await UserModel.findAll({ where: { role: 'étudiant' } });
                 return userSuccess(`Les étudiants ont été trouvé !`, users as unknown as UserType[]);
-            }, res)
+            }, res);
         });
         this.router.get('/intervenants', (req: Request, res: Response, next: NextFunction) => { RoleMiddleware(['admin'], req, res, next); }, (_req: Request, res: Response) => {
             this.errorHandler(async () => {
                 const users = await UserModel.findAll({ where: { role: 'intervenant' } });
                 return userSuccess(`Les intervenants on été trouvé`, users as unknown as UserType[]);
-            }, res)
+            }, res);
         });
         return this.router;
     }

@@ -5,5 +5,7 @@ type UserType = {
     password: string,
     role: Role,
     token?: string,
+    mfaValidated: boolean,
+    mfaSecret: string,
 };
 export default UserType;

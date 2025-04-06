@@ -6,7 +6,7 @@ const get = async () => {
     try {
         await fetch(baseUrl, {
             method: 'POST',
-            headers:{'content-type':'application/json'},
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 email: 'Jason.token@webjwt.com',
                 username: 'Jason',
@@ -16,7 +16,7 @@ const get = async () => {
         });
         await fetch(baseUrl, {
             method: 'POST',
-            headers:{'content-type':'application/json'},
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 email: 'etudiant2@gmail.com',
                 username: 'Rabit',
@@ -26,7 +26,7 @@ const get = async () => {
         });
         await fetch(baseUrl, {
             method: 'POST',
-            headers:{'content-type':'application/json'},
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 email: 'JeVeuxUneAlternance@rapidement.com',
                 username: 'HelloWorld',
@@ -39,7 +39,7 @@ const get = async () => {
 
         await fetch(baseUrl, {
             method: 'POST',
-            headers:{'content-type':'application/json'},
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 email: 'intervenant@gmail.com',
                 username: 'WindowsXP',
@@ -49,7 +49,7 @@ const get = async () => {
         });
         await fetch(baseUrl, {
             method: 'POST',
-            headers:{'content-type':'application/json'},
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 email: 'intervenant2@gmail.com',
                 username: 'WindowsVista',
@@ -59,7 +59,7 @@ const get = async () => {
         });
         await fetch(baseUrl, {
             method: 'POST',
-            headers:{'content-type':'application/json'},
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 email: 'intervenant3@gmail.com',
                 username: 'Windows7',
@@ -72,7 +72,7 @@ const get = async () => {
 
         await fetch(baseUrl, {
             method: 'POST',
-            headers:{'content-type':'application/json'},
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 email: 'admin@gmail.com',
                 username: 'WinDevEnjoyer',
@@ -82,7 +82,7 @@ const get = async () => {
         });
         await fetch(baseUrl, {
             method: 'POST',
-            headers:{'content-type':'application/json'},
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 email: 'insertInto@gmail.com',
                 username: 'SqlNinja',
@@ -92,7 +92,7 @@ const get = async () => {
         });
         await fetch(baseUrl, {
             method: 'POST',
-            headers:{'content-type':'application/json'},
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 email: 'linustorvald@windobe.com',
                 username: 'Linus',

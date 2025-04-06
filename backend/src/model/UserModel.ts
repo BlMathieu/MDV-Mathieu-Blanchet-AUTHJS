@@ -24,6 +24,13 @@ const Users = client.define('users', {
             isIn: [['étudiant', 'intervenant', 'admin']],
         }
     },
+    mfaValidated: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+    mfaSecret: {
+        type: DataTypes.STRING,
+    }
 });
 
 export default Users;

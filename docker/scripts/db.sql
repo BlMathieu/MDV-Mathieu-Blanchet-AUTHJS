@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS db_authjs.users (
     password VARCHAR(200) NOT NULL,
     refresh_token VARCHAR(500),
     role ENUM('étudiant', 'intervenant', 'admin') NOT NULL DEFAULT 'étudiant',
+    mfaValidated BOOLEAN,
+    mfaSecret VARCHAR(200),
     PRIMARY KEY (email)
 );
 

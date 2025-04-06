@@ -5,5 +5,6 @@ export type TokenSignature = 'refresh' | 'access';
 export default interface TokenType {
     username: string,
     email: string,
-    role: Role
+    role: Role,
+    mfaValidated: boolean
 }

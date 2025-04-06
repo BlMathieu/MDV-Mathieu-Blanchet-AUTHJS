@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch } from "../../stores/Store";
-import { logout } from "../../stores/authentication/AuthenticationSlicer";
+import { setExpired } from "../../stores/authentication/AuthenticationSlicer";
 export default function PersonalInformation() {
     const authInstance = useSelector((state: any) => state.authentication);
     const [loginDelay, setLoginDelay] = useState(Number(authInstance.user.exp - (Date.now() / 1000)));
@@ -13,7 +13,7 @@ export default function PersonalInformation() {
                 const delay = Number(authInstance.user.exp - (Date.now()) / 1000);
                 setLoginDelay(delay);
                 const logState = delay > 0;
-                if (logState === false) dispatch(logout());
+                if (logState === false) dispatch(setExpired(true));
             }, 100);
             return () => clearInterval(interval);
         }
@@ -29,6 +29,8 @@ export default function PersonalInformation() {
                 <p>Role : <span>{authInstance.user.role}</span></p>
                 <p>|</p>
                 <p>IsLogged : <span>{authInstance.isLogged.toString()}</span></p>
+                <p>|</p>
+                <p>MFAValidated : <span>{authInstance.user.mfaValidated.toString()}</span></p>
                 <p>|</p>
                 <p>Token Délais : <span>{loginDelay.toString()}</span></p>
             </article>

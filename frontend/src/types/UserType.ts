@@ -15,6 +15,7 @@ export interface UserToken {
     email: string,
     username: string,
     role: Role,
+    mfaValidated: boolean
 }
 
 export interface UserCredentials {

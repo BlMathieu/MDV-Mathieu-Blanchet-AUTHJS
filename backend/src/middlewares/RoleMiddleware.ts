@@ -8,6 +8,8 @@ const RoleMiddleware = async (authorization: Role[], req: Request, res: Response
         const service = new AuthenticationService();
         const accessToken = req.headers.authorization?.replace('Bearer ', '') as string;
         const dbUser = await service.handleJWTAuth(accessToken);
+        const mfaValidated = dbUser.get('mfaValidated');
+        if (!mfaValidated) throw new Error('MFA invalide !');
         const role = dbUser.get('role') as Role;
         if (!authorization.includes(role)) throw new Error("L'utilisateur ne dispose pas du bon rôle !"); next();
     } catch (error) {

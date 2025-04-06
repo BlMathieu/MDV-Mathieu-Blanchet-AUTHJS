@@ -38,10 +38,8 @@ export default class AuthenticatorController extends AbstractController {
         });
         this.router.post('/logout', (req: Request, res: Response) => {
             this.errorHandler(async () => {
-                const accessToken = req.headers.authorization?.replace('Bearer ', '') as string;
-                const user = await this.service.handleJWTAuth(accessToken);
-                const email = user.get('email') as string;
-                await user.update({ 'refresh_token': '', 'mfaValidated': false }, { where: { email: email } })
+                const refresh = req.cookies['refresh_token'];
+                await this.service.logoutUser(refresh);
                 res.clearCookie('refresh_token');
                 return authSuccess("L'utilisateur à bien été déconnecté !");
             }, res);
@@ -69,8 +67,10 @@ export default class AuthenticatorController extends AbstractController {
             this.errorHandler(async () => {
                 const { secret } = req.body;
                 const accessToken = req.headers.authorization?.replace('Bearer ', '') as string;
-                await this.service.handleOTPAuth(accessToken, secret);
-                return authSuccess('MFAOTP réussi !');
+                const user = await this.service.handleJWTAuth(accessToken);
+                const tokens = await this.service.handleOTPAuth(user, secret);
+                res.cookie('refresh_token', tokens.refresh, { httpOnly: true, sameSite: 'lax' });
+                return authSuccess('MFAOTP réussi !', tokens.access);
             }, res);
         })
         return this.router

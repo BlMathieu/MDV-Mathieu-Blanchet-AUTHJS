@@ -22,10 +22,13 @@ export default function Dashboard(props: DashboardProps) {
             }
         }).then((value) => {
             const content = value.data;
-            if (!content.status) toast.error(content.message);
+            if (!content.status) {
+                setUsers([]);
+                toast.error(content.message);
+            }
             else {
                 setUsers(content.data);
-                toast.success(content.data);
+                toast.success(content.message);
             }
         }).catch((error) => {
             setUsers([]);

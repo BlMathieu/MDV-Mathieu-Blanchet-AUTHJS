@@ -4,6 +4,7 @@ import { comparePassword, hashPassword } from "../utils/BcryptUtils";
 import JwtUtils from "../utils/JwtUtils";
 import TokenType from "../utils/types/TokenType";
 import UserType, { Role } from "../utils/types/UserType";
+import * as OTPAuth from 'otpauth';
 
 export default class AuthenticationService {
     private jwtUtils: JwtUtils;
@@ -22,6 +23,7 @@ export default class AuthenticationService {
             username: dbUser.get('username') as string,
             email: dbUser.get('email') as string,
             role: dbUser.get('role') as Role,
+            mfaValidated: dbUser.get('mfaValidated') as boolean,
         };
 
         const accessToken = this.jwtUtils.getAccessToken(payload);
@@ -35,6 +37,15 @@ export default class AuthenticationService {
         await UserModel.create(user);
     }
 
+    public async logoutUser(refresh: string): Promise<void> {
+        if (!refresh) throw new Error('Token invalide !');
+        const userPayload = this.jwtUtils.checkTokenSignature(refresh, 'refresh') as TokenType;
+        const dbUser = await UserModel.findOne({ where: { email: userPayload.email } });
+        if (!dbUser) throw new Error('Aucun utilisateur trouvé !');
+        const email = dbUser.get('email') as string;
+        await dbUser.update({ 'refresh_token': '', 'mfaValidated': false }, { where: { email: email } })
+    }
+
     public async refreshUser(token: string): Promise<string> {
         if (!token) throw new Error('Aucun token trouvé !');
         const refreshPayload = this.jwtUtils.checkTokenSignature(token, 'refresh') as TokenType;
@@ -44,6 +55,7 @@ export default class AuthenticationService {
             username: dbUser.get('username') as string,
             email: dbUser.get('email') as string,
             role: dbUser.get('role') as Role,
+            mfaValidated: dbUser.get('mfaValidated') as boolean,
         }
         const access = this.jwtUtils.getAccessToken(newPayload);
         return access;
@@ -57,13 +69,30 @@ export default class AuthenticationService {
         if (!dbUser) throw new Error("L'utilisateur n'existe pas !");
         return dbUser;
     }
-    public async handleOTPAuth(accessToken: string, secret:string) {
-        const user = await this.handleJWTAuth(accessToken);
+
+    public async handleOTPAuth(user: Model, secret: string): Promise<{ access: string, refresh: string }> {
+        const jwtUtils = new JwtUtils();
         const email = user.get('email') as string;
         const dbSecret = user.get('mfaSecret') as string;
-        if (secret != dbSecret) throw new Error('Secret incorrect !');
-        await user.update({ 'mfaValidated': true }, { where: { email: email } })
+        const totp = new OTPAuth.TOTP({
+            issuer: 'MFA-OTP',
+            label: email,
+            algorithm: 'SHA1',
+            digits: 6,
+            period: 30,
+            secret: OTPAuth.Secret.fromBase32(dbSecret)
+        });
+        totp.validate({ token: secret, timestamp: Date.now() });
+
+        const payload: TokenType = {
+            email: email,
+            username: user.get('username') as string,
+            role: user.get('role') as Role,
+            mfaValidated: true,
+        }
+        const accessToken = jwtUtils.getAccessToken(payload);
+        const refreshToken = jwtUtils.getRefreshToken(payload);
+        await user.update({ 'refresh_token': refreshToken, 'mfaValidated': true }, { where: { email: email } })
+        return { access: accessToken, refresh: refreshToken };
     }
-
-
 }

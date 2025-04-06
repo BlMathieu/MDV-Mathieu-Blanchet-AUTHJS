@@ -96,7 +96,7 @@ const get = async () => {
             body: JSON.stringify({
                 email: 'linustorvald@windobe.com',
                 username: 'Linus',
-                password: 'GNU',
+                password: 'GNULinux',
                 role: 'admin'
             })
         });

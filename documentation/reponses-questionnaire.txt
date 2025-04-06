@@ -7,13 +7,13 @@ L'authorisation permet l'attribution de droits à un utilisateur précédemment 
 Contrairement à l'authentification, l'authorisation ne permet pas de prouver l'identité d'un utilisateur.
 
 3. Qu'est-ce qu'un facteur d'authentification ?
-Un facteur d'authentification est une méthode permettant d'authentfier un utilisateur.
+Un facteur d'authentification est une méthode permettant de prouver l'identité d'un utilisateur.
 
 
 4. Citez 3 méthodes d'authentification
  - Authentification par token JWT
  - Authentification par Session utilisateur
- - Authentification par OAuth2 à partir d'un service d'authentification externe
+ - Authentification par OAuth2 à partir d'un service d'authentification externe style GOOGLE/GITHUB
 
 
 5. Qu'est-ce que le hashage ?
@@ -35,9 +35,11 @@ L'attaque par brute force consiste à tester plusieurs combinaisons de mot de pa
 Pour s'en prémunir, il existe plusieurs solutions :
 - Fournir un mot de passe robuste de plus de 8 caractères alliant lettres, chiffres et caractères spéciaux
 - Limiter les nombres d'essai lors d'une connexion (example: utiliser un rate-limiter)
+- Créer de la latence entre chaque essai pour augmenter artificiellement le temps de force brute nécessaire.
 
-9. Quels sont les points d'attentions lors d'un développement d'un système d'authentification ?
-(architecture, code, dépendences, etc...)
+9. Quels sont les points d'attentions lors d'un développement d'un système d'authentification ? (architecture, code, dépendences, etc...)
+Lors du développement d'un système d'authentification, il est important de prêter attention aux droits nécessaire pour chaque type d'utilisateurs et d'y attribuer des roles pour éviter tout abus d'utilisation des APIS.
+Concernant les dépendances, il est important pour le développeur de veiller à utiliser des packages qui sont toujours utilisés/maintenus, et qui ne possédent aucune failles connus. 
 
 
 10. Expliquer le principe d'authentification multifacteur ?
@@ -45,7 +47,9 @@ L'authentification multifacteur est un système d'authentification demandant aux
 
 
 11. Qu'est-ce qu'une attaque CSRF ? Comment peut-on s'en protéger ?
-
+Les attaques CSRF ont pour but de faire exécuté des actions non voulues à des utilisateurs authentifiés.
+Pour s'en protéger, il est nécessaire de toujours utilisé des cookie en httponly pour évité le vole par exécution de code JS, de valider les paramètres des requêtes HTTP.
+Une autre méthode consiste à utiliser un token CSRF, une valeur aléatoire généré par le serveur et envoyé au client ne permettant pas à un tiers d'envoyer lui-même des requêtes valides. 
 
 
 12. Expliquez ce que représente pour vous le principe de session, de cookies et de headers.
@@ -66,6 +70,6 @@ Ce token permet ensuite d'authentifier un utilisateur sans que ce dernier ai bes
 
 
 15. Qu'est-ce que l'OAuth 2 ? Qu'est-ce qu'il résoud ?
-L'OAuth2 permet à une application d'authentifier ses utilisateurs en passant par un service d'authentification externe (exemple: google authenticator).
+L'OAuth2 permet à une application d'authentifier ses utilisateurs en passant par un service d'authentification externe (exemple: google/github).
 Ce mécanisme permet de faire gagner du temps au développeur qui n'a plus à ce soucier de créer un système d'authentification pour son application.
 Aussi, d'un point de vu légal, cela permet de rediriger certaines implications juridiques en matière de protection des données, sur l'organisme externe gérant l'authentification des utilisateurs.
